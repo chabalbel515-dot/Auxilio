@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Sielzada V3</title>
     <style>
-        /* DESIGN SIELZADA V3 - UNIFICADO */
+        /* DESIGN SIELZADA V3 */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 
         body {
@@ -147,7 +147,9 @@
                     <label class="switch"><input type="checkbox" id="max-fps"><span class="slider"></span></label>
                 </div>
             </div>
-            <button class="main-btn" style="margin-top: 20px;" onclick="window.location.href='intent:#Intent;package=com.dts.freefiremax;scheme=android-app;end'">ABRIR GAME</button>
+            
+            <button class="main-btn" style="margin-top: 20px;" onclick="openGame()">ABRIR GAME</button>
+            
             <div class="footer-brand">sielz</div>
         </div>
     </div>
@@ -155,7 +157,6 @@
     <script>
         function checkKey() {
             const key = document.getElementById('access-key').value;
-            // Altere 'SIELZ' pela senha que você quiser
             if (key.toUpperCase() === 'SIELZ') {
                 document.getElementById('login-screen').style.display = 'none';
                 const panel = document.getElementById('main-panel');
@@ -167,6 +168,12 @@
             } else {
                 alert('Key Inválida!');
             }
+        }
+
+        function openGame() {
+            // Este é o formato mais aceito por navegadores Android modernos
+            const ffMaxIntent = "intent://#Intent;scheme=android-app;package=com.dts.freefiremax;end";
+            window.location.href = ffMaxIntent;
         }
     </script>
 </body>
