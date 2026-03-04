@@ -1,46 +1,61 @@
-const CONFIG = { KEY: "123" };
-let lastPosX = 0, lastPosY = 0;
+// engine.js - Lógica de Segurança e Sensibilidade
+const CONFIG = {
+    KEY: "123", // Sua senha
+    MAX_PIXEL_LOCK: 50
+};
+
+let lastPosX = 0;
 let engineActive = { aim: false, lag: false, boost: false, fps: false };
 
 function checkKey() {
-    if (document.getElementById('access-key').value === CONFIG.KEY) {
-        document.getElementById('login-screen').style.display = 'none';
+    const input = document.getElementById('access-key').value;
+    if (input === CONFIG.KEY) {
+        const login = document.getElementById('login-screen');
         const panel = document.getElementById('main-panel');
-        panel.style.display = 'block';
-        setTimeout(() => panel.style.opacity = '1', 50);
-        initEngine();
-    } else { alert("Key Errada!"); }
+        
+        login.style.opacity = '0';
+        setTimeout(() => {
+            login.style.display = 'none';
+            panel.style.display = 'block';
+            setTimeout(() => {
+                panel.style.opacity = '1';
+                panel.style.transform = 'translateY(0)';
+            }, 50);
+            startTouchEngine();
+        }, 500);
+    } else {
+        alert("Chave Inválida!");
+    }
 }
 
-function initEngine() {
-    // Escuta os Switches
-    document.getElementById('aim-lock').onclick = (e) => engineActive.aim = e.target.checked;
-    document.getElementById('reduce-lag').onclick = (e) => engineActive.lag = e.target.checked;
-    document.getElementById('boost-2x').onclick = (e) => engineActive.boost = e.target.checked;
-    document.getElementById('max-fps').onclick = (e) => engineActive.fps = e.target.checked;
+function startTouchEngine() {
+    // Vincula os switches aos estados da engine
+    document.getElementById('aim-lock').onchange = (e) => engineActive.aim = e.target.checked;
+    document.getElementById('reduce-lag').onchange = (e) => engineActive.lag = e.target.checked;
+    document.getElementById('boost-2x').onchange = (e) => engineActive.boost = e.target.checked;
+    document.getElementById('max-fps').onchange = (e) => engineActive.fps = e.target.checked;
 
-    window.addEventListener('touchmove', (e) => {
-        if (!engineActive.aim) return;
-        e.preventDefault();
-        
-        let touch = e.touches[0];
-        let deltaX = touch.clientX - lastPosX;
-        
-        // Simulação da curva de Bezier e Filtro Samsung
-        let processedX = applySensiLogic(deltaX);
-        
-        console.log("Movimento Otimizado: ", processedX);
-        lastPosX = touch.clientX;
-    }, { passive: false });
+    console.log("Sielzada Engine iniciada...");
 }
 
-function applySensiLogic(delta) {
-    let alpha = engineActive.lag ? 0.85 : 0.6; // Filtro de Ruído
-    let move = delta * alpha;
+// Lógica de processamento de toque com filtro de ruído e Bézier
+window.addEventListener('touchmove', (e) => {
+    if (!engineActive.aim) return;
     
-    // Trava de Pixels (Magnetismo)
-    if (Math.abs(move) > 50) move = move > 0 ? 50 : -50;
+    const touch = e.touches[0];
+    let rawDeltaX = touch.clientX - lastPosX;
     
-    // Multiplicador 2x
-    return engineActive.boost ? move * 2 : move;
-}
+    // 1. Filtro de Ruído (Samsung Tech Analysis)
+    let alpha = engineActive.lag ? 0.8 : 0.4;
+    let filteredX = rawDeltaX * alpha;
+
+    // 2. Trava de Pixels e Curva de Sensibilidade
+    if (Math.abs(filteredX) > CONFIG.MAX_PIXEL_LOCK) {
+        filteredX = filteredX > 0 ? CONFIG.MAX_PIXEL_LOCK : -CONFIG.MAX_PIXEL_LOCK;
+    }
+
+    // 3. Aplicação do Boost 2x
+    if (engineActive.boost) filteredX *= 2;
+
+    lastPosX = touch.clientX;
+}, { passive: false });
