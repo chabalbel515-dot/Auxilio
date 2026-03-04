@@ -1,14 +1,17 @@
 // engine.js - Lógica de Segurança e Sensibilidade
 const CONFIG = {
-    KEY: "123", // Sua senha
+    KEY: "123", // Sua senha permanece 123
     MAX_PIXEL_LOCK: 50
 };
 
 let lastPosX = 0;
 let engineActive = { aim: false, lag: false, boost: false, fps: false };
 
-function checkKey() {
-    const input = document.getElementById('access-key').value;
+// Tornamos a função global para o HTML encontrar sem erros
+window.checkKey = function() {
+    const inputField = document.getElementById('access-key');
+    const input = inputField.value.trim(); // .trim() remove espaços vazios acidentais
+
     if (input === CONFIG.KEY) {
         const login = document.getElementById('login-screen');
         const panel = document.getElementById('main-panel');
@@ -25,8 +28,9 @@ function checkKey() {
         }, 500);
     } else {
         alert("Chave Inválida!");
+        inputField.value = ""; // Limpa o campo se errar
     }
-}
+};
 
 function startTouchEngine() {
     // Vincula os switches aos estados da engine
@@ -38,7 +42,7 @@ function startTouchEngine() {
     console.log("Sielzada Engine iniciada...");
 }
 
-// Lógica de processamento de toque com filtro de ruído e Bézier
+// Lógica de processamento de toque original mantida
 window.addEventListener('touchmove', (e) => {
     if (!engineActive.aim) return;
     
