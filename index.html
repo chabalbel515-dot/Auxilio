@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <title>Sielzada V3</title>
+</head>
+<body>
+    <div id="login-screen" class="panel-container">
+        <div class="glass-card">
+            <div class="profile-circle">
+                <img src="https://via.placeholder.com/100" alt="Avatar">
+            </div>
+            <h3>coloca a key de acesso</h3>
+            <input type="password" id="access-key" placeholder="insira a key...">
+            <button onclick="checkKey()" class="main-btn">logar</button>
+            <div class="footer-brand">sielz</div>
+        </div>
+    </div>
+
+    <div id="main-panel" class="panel-container" style="display: none; opacity: 0;">
+        <div class="glass-card">
+            <h2>PAINEL SIELZADA V3</h2>
+            <div class="toggle-list">
+                <div class="toggle-item">
+                    <div class="item-info"><span>aimbot legit</span><small>Alinhamento via Bézier</small></div>
+                    <label class="switch"><input type="checkbox" id="aim-lock"><span class="slider"></span></label>
+                </div>
+                <div class="toggle-item">
+                    <div class="item-info"><span>reduzir lags</span><small>Filtro de ruído Samsung</small></div>
+                    <label class="switch"><input type="checkbox" id="reduce-lag"><span class="slider"></span></label>
+                </div>
+                <div class="toggle-item">
+                    <div class="item-info"><span>melhorar 2x</span><small>Sensibilidade Linear</small></div>
+                    <label class="switch"><input type="checkbox" id="boost-2x"><span class="slider"></span></label>
+                </div>
+                <div class="toggle-item">
+                    <div class="item-info"><span>desempenho</span><small>Sincronização de frames</small></div>
+                    <label class="switch"><input type="checkbox" id="max-fps"><span class="slider"></span></label>
+                </div>
+            </div>
+            <button class="main-btn" style="margin-top: 20px;">ABRIR FREE FIRE</button>
+            <div class="footer-brand">sielz</div>
+        </div>
+    </div>
+
+    <script src="engine.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
