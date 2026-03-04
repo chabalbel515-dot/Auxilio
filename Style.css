@@ -1,0 +1,36 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: #000;
+    background-image: radial-gradient(circle at center, #1a1000 0%, #000 100%);
+    height: 100vh; display: flex; justify-content: center; align-items: center;
+    color: white; font-family: sans-serif; overflow: hidden;
+}
+.panel-container { width: 90%; max-width: 360px; transition: 0.5s; }
+.glass-card {
+    background: rgba(20, 20, 20, 0.8); border: 1px solid rgba(255, 140, 0, 0.2);
+    border-radius: 25px; padding: 25px; backdrop-filter: blur(15px); text-align: center;
+}
+.profile-circle { width: 90px; height: 90px; border-radius: 50%; border: 2px solid #ff8c00; margin: 0 auto 15px; overflow: hidden; }
+.profile-circle img { width: 100%; height: 100%; object-fit: cover; }
+input[type="password"] {
+    width: 100%; background: rgba(255,255,255,0.05); border: 1px solid #333;
+    padding: 12px; border-radius: 12px; color: white; margin-bottom: 20px; text-align: center;
+}
+.main-btn {
+    width: 100%; background: #ff8c00; border: none; padding: 12px;
+    border-radius: 12px; color: #000; font-weight: bold; text-transform: uppercase; cursor: pointer;
+}
+.toggle-item {
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(255,255,255,0.03); margin-bottom: 8px; padding: 10px; border-radius: 12px;
+}
+.item-info { text-align: left; }
+.item-info span { display: block; font-size: 0.85rem; font-weight: bold; }
+.item-info small { color: #777; font-size: 0.65rem; }
+.switch { position: relative; width: 40px; height: 20px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #333; transition: .4s; border-radius: 20px; }
+.slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background: #ff8c00; }
+input:checked + .slider:before { transform: translateX(20px); }
+.footer-brand { margin-top: 15px; font-size: 0.7rem; color: rgba(255,255,255,0.1); letter-spacing: 4px; }
