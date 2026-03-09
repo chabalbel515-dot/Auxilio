@@ -1,12 +1,15 @@
 {
-  "name": "Sielzada V3 Engine",
-  "short_name": "Sielzada",
-  "start_url": "index.html",
-  "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#ff8c00",
-  "icons": [
-    { "src": "https://via.placeholder.com/192", "sizes": "192x192", "type": "image/png" },
-    { "src": "https://via.placeholder.com/512", "sizes": "512x512", "type": "image/png" }
-  ]
+"name":"Sensibilidade Pro",
+"short_name":"SensPro",
+"start_url":"index.html",
+"display":"standalone",
+"background_color":"#000000",
+"theme_color":"#ff8800",
+"icons":[
+{
+"src":"icon.png",
+"sizes":"192x192",
+"type":"image/png"
+}
+]
 }
