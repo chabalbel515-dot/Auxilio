@@ -1,62 +1,91 @@
-// engine.js - Lógica de Segurança e Sensibilidade
-const CONFIG = {
-    KEY: "123", // Sua senha
-    MAX_PIXEL_LOCK: 50
-};
+class SensEngine{
 
-let lastPosX = 0;
-let engineActive = { aim: false, lag: false, boost: false, fps: false };
+constructor(){
 
-// Mantendo seu código original, apenas garantindo que o HTML o encontre
-window.checkKey = function() {
-    const input = document.getElementById('access-key').value;
-    if (input === CONFIG.KEY) {
-        const login = document.getElementById('login-screen');
-        const panel = document.getElementById('main-panel');
-        
-        login.style.opacity = '0';
-        setTimeout(() => {
-            login.style.display = 'none';
-            panel.style.display = 'block';
-            setTimeout(() => {
-                panel.style.opacity = '1';
-                panel.style.transform = 'translateY(0)';
-            }, 50);
-            startTouchEngine();
-        }, 500);
-    } else {
-        alert("Chave Inválida!");
-    }
+this.lastX=0
+this.lastY=0
+
+this.smooth=0.25
+this.pixelLock=30
+
+this.enabled={}
+
 }
 
-function startTouchEngine() {
-    // Vincula os switches aos estados da engine
-    document.getElementById('aim-lock').onchange = (e) => engineActive.aim = e.target.checked;
-    document.getElementById('reduce-lag').onchange = (e) => engineActive.lag = e.target.checked;
-    document.getElementById('boost-2x').onchange = (e) => engineActive.boost = e.target.checked;
-    document.getElementById('max-fps').onchange = (e) => engineActive.fps = e.target.checked;
+bezier(t,p0,p1,p2,p3){
 
-    console.log("Sielzada Engine iniciada...");
+return(
+Math.pow(1-t,3)*p0+
+3*Math.pow(1-t,2)*t*p1+
+3*(1-t)*Math.pow(t,2)*p2+
+Math.pow(t,3)*p3
+)
+
 }
 
-// Lógica de processamento de toque com filtro de ruído e Bézier
-window.addEventListener('touchmove', (e) => {
-    if (!engineActive.aim) return;
-    
-    const touch = e.touches[0];
-    let rawDeltaX = touch.clientX - lastPosX;
-    
-    // 1. Filtro de Ruído (Samsung Tech Analysis)
-    let alpha = engineActive.lag ? 0.8 : 0.4;
-    let filteredX = rawDeltaX * alpha;
+noiseFilter(value,last){
 
-    // 2. Trava de Pixels e Curva de Sensibilidade
-    if (Math.abs(filteredX) > CONFIG.MAX_PIXEL_LOCK) {
-        filteredX = filteredX > 0 ? CONFIG.MAX_PIXEL_LOCK : -CONFIG.MAX_PIXEL_LOCK;
-    }
+return last+(value-last)*this.smooth
 
-    // 3. Aplicação do Boost 2x
-    if (engineActive.boost) filteredX *= 2;
+}
 
-    lastPosX = touch.clientX;
-}, { passive: false });
+pixelLockCheck(dx,dy){
+
+let dist=Math.sqrt(dx*dx+dy*dy)
+
+if(dist>this.pixelLock){
+
+dx*=0.4
+dy*=0.4
+
+}
+
+return{dx,dy}
+
+}
+
+process(x,y){
+
+let dx=x-this.lastX
+let dy=y-this.lastY
+
+let speed=Math.sqrt(dx*dx+dy*dy)
+
+let curve=this.bezier(
+Math.min(speed/60,1),
+0,
+0.2,
+0.8,
+1
+)
+
+dx*=curve
+dy*=curve
+
+let filteredX=this.noiseFilter(x,this.lastX)
+let filteredY=this.noiseFilter(y,this.lastY)
+
+let lock=this.pixelLockCheck(dx,dy)
+
+this.lastX=filteredX
+this.lastY=filteredY
+
+return lock
+
+}
+
+setOption(name,val){
+
+this.enabled[name]=val
+
+}
+
+start(){
+
+document.body.classList.add("engine-active")
+
+}
+
+}
+
+window.Engine=new SensEngine()
